@@ -54,10 +54,10 @@
 
 <div class="no-print-area no-print">
     <div class="max-w-7xl mx-auto p-4">
-        <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3"><i class="fa-solid fa-file-invoice"></i> PPL MILENIAL WAJO - GENERATOR LAPORAN TRIWULAN (bukan form resmi)</h2>
+        <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3"><i class="fa-solid fa-file-invoice"></i> PPL WAJO - GENERATOR LAPORAN TRIWULAN (F4)</h2>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div class="lg:col-span-1 flex flex-col gap-3"> 
-                <label class="text-xs font-bold text-slate-400 uppercase">Data Penyuluh</label>
+                <label class="text-xs font-bold text-slate-400 uppercase">Identitas Penyuluh</label>
                 <select id="in_nama" onchange="updateIdentitas()">
                     <option value="">-- Pilih Nama --</option>
                     <option>ABDUL RAHMAN, SP</option>
@@ -76,18 +76,12 @@
                 </select>
                 <input type="text" id="in_nip" oninput="sync()" placeholder="NIP">
                 <select id="in_jabatan" onchange="sync()">
-                    <option value="">-- Pilih Jabatan --</option>
-                    <option value="Penyuluh Pertanian Pemula">Penyuluh Pertanian Pemula</option>
-                        <option value="Penyuluh Pertanian Terampil">Penyuluh Pertanian Terampil</option>
-                        <option value="Penyuluh Pertanian Mahir">Penyuluh Pertanian Mahir</option>
-                        <option value="Penyuluh Pertanian Penyelia">Penyuluh Pertanian Penyelia</option>
-                        <option value="Penyuluh Pertanian Ahli Pertama">Penyuluh Pertanian Ahli Pertama</option>
-                        <option value="Penyuluh Pertanian Ahli Muda">Penyuluh Pertanian Ahli Muda</option>
-                        <option value="Penyuluh Pertanian Ahli Madya">Penyuluh Pertanian Ahli Madya</option>
-                        <option value="Penyuluh Pertanian Ahli Utama">Penyuluh Pertanian Ahli Utama</option>
+                    <option value="Penyuluh Pertanian Ahli Pertama">Penyuluh Pertanian Ahli Pertama</option>
+                    <option value="Penyuluh Pertanian Ahli Muda">Penyuluh Pertanian Ahli Muda</option>
+                    <option value="Penyuluh Pertanian Terampil">Penyuluh Pertanian Terampil</option>
                 </select>
                 <input type="text" id="in_wkpp" oninput="sync()" placeholder="WKPP">
-                <input type="text" id="in_kab" oninput="sync()" value="Wajo" placeholder="Kabupaten">
+                <input type="text" id="in_kab" oninput="sync()" value="WAJO" placeholder="Kabupaten">
                 <input type="text" id="in_bpp" oninput="sync()" placeholder="Kecamatan">
                 <select id="in_triwulan" onchange="sync()">
                     <option value="TRIWULAN I">Triwulan I (Jan - Mar)</option>
@@ -123,10 +117,11 @@
             <div class="grid grid-cols-3"><span>NIP</span><span class="col-span-2">: <span id="out_nip_cover">-</span></span></div>
             <div class="grid grid-cols-3"><span>WKPP</span><span class="col-span-2">: <span id="out_wkpp_cover">-</span></span></div>
             <div class="grid grid-cols-3"><span>BPP</span><span class="col-span-2">: <span id="out_bpp_cover">-</span></span></div>
-            <div class="grid grid-cols-3"><span>KABUPATEN</span><span class="col-span-2" id="out_kab_cover">WAJO</span></div>
+            <div class="grid grid-cols-3"><span>KABUPATEN</span><span class="col-span-2">: <span id="out_kab_cover">WAJO</span></span></div>
         </div>
-       <div class="font-bold mt-10"><p>KEMENTERIAN PERTANIAN</p><p>BADAN PENYULUHAN DAN PENGEMBANGAN SDM PERTANIAN</p><p>PUSAT PENYULUHAN PERTANIAN</p><p class="mt-4">2026</p></div>
+        <div class="font-bold">KEMENTERIAN PERTANIAN<br>2026</div>
     </div>
+
     <div class="page">
         <h2 class="text-center font-bold text-lg mb-10">KATA PENGANTAR</h2>
         <div id="out_kp" class="text-justify leading-relaxed whitespace-pre-line italic text-gray-400">Menunggu AI...</div>
@@ -145,7 +140,7 @@
         <div class="toc-list">
             <div class="toc-item"><span class="toc-title">HALAMAN JUDUL</span><span class="toc-filler"></span><span class="toc-page"></span></div>
             <div class="toc-item"><span class="toc-title">KATA PENGANTAR</span><span class="toc-filler"></span><span class="toc-page">i</span></div>
-            <div class="toc-item font-bold"><span class="toc-title">DAFTAR ISI</span><span class="toc-filler"></span><span class="toc-page">ii</span></div><br>
+            <div class="toc-item font-bold italic"><span class="toc-title">DAFTAR ISI</span><span class="toc-filler"></span><span class="toc-page">ii</span></div><br>
             <div class="toc-item font-bold"><span class="toc-title">BAB I. PENDAHULUAN</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
             <div class="toc-item indent-1"><span class="toc-title">1.1. Latar Belakang</span><span class="toc-filler"></span><span class="toc-page">1</span></div>
             <div class="toc-item indent-1"><span class="toc-title">1.2. Tujuan Pelaporan</span><span class="toc-filler"></span><span class="toc-page">1</span></div><br>
@@ -202,6 +197,7 @@
 </div>
 
 <script>
+    // DATA PENYULUH
     const dataPenyuluh = {
         "ABDUL RAHMAN, SP": { nip: "199009202020121001", wilayah: "DESA MANURUNG" },
         "A. FATHUR MUH. ISHAQ B, S.ST., M.Si": { nip: "199604112020121001", wilayah: "KEL. LAELO, KEL. TEMPE, KEL. CEMPALAGI" },
@@ -295,8 +291,8 @@
         document.getElementById('out_nip_cover').innerText = val('in_nip');
         document.getElementById('out_nip_sig2').innerText = val('in_nip');
         document.getElementById('out_jabatan_cover').innerText = (val('in_jabatan') || "PENYULUH PERTANIAN").toUpperCase();
-        document.getElementById('out_wkpp_cover').innerText = val('in_wkpp');
-        document.getElementById('out_bpp_cover').innerText = val('in_bpp');
+        document.getElementById('out_wkpp_cover').innerText = val('in_wkpp').toUpperCase();
+        document.getElementById('out_bpp_cover').innerText = val('in_bpp').toUpperCase();
         document.getElementById('out_kab_cover').innerText = (val('in_kab') || "WAJO").toUpperCase();
         const tgl = val('in_tanggal') ? new Date(val('in_tanggal')).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : "...";
         document.getElementById('out_lokasi_tgl_kp').innerText = `${val('in_bpp') || '...'}, ${tgl}`;
@@ -308,14 +304,78 @@
 
     async function generateAI() {
         const btn = document.getElementById('btn-ai');
-        const apiKey = "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"; 
+        const apiKey = "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"; 
+
         let selectedData = [];
-        ikiRef.forEach(item => { if(document.getElementById(`chk_${item.id}`).checked) { selectedData.push({ id: item.id, nama: item.k, target: item.tar, sat: item.sat, m1: document.getElementById(`m1_${item.id}`).value || 0, m2: document.getElementById(`m2_${item.id}`).value || 0, m3: document.getElementById(`m3_${item.id}`).value || 0, user_kendala: document.getElementById(`ken_${item.id}`).value }); } });
-        if(selectedData.length === 0) return alert("Pilih IKI!");
-        btn.innerHTML = "..."; btn.disabled = true;
-        const prompt = `Laporan TRIWULAN PPL formal. Data: ${JSON.stringify(selectedData)}. Lokasi: ${document.getElementById('in_bpp').value}. JSON murni: {"kp":"", "latar":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
-        try { const res = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` }, body: JSON.stringify({ model: "llama-3.3-70b-versatile", messages: [{ role: "user", content: prompt }], response_format: { type: "json_object" } }) }); const result = await res.json(); const aiData = JSON.parse(result.choices[0].message.content); document.getElementById('out_kp').innerHTML = aiData.kp.replace(/\n/g, '<br>'); document.getElementById('out_latar').innerText = aiData.latar; document.getElementById('out_kesimp').innerText = aiData.kesimp; aiData.items.forEach(item => { const rCell = document.getElementById(`out_r_${item.id}`); const kCell = document.getElementById(`out_k_${item.id}`); if(rCell) rCell.innerHTML = item.analisis; if(kCell) kCell.innerText = item.tindak; }); document.querySelectorAll('.italic.text-gray-400').forEach(el => el.classList.remove('italic', 'text-gray-400')); } catch (e) { alert("AI Error"); } finally { btn.innerHTML = "🚀 GENERATE AI"; btn.disabled = false; }
+        ikiRef.forEach((item) => {
+            if(document.getElementById(`chk_${item.id}`).checked) {
+                selectedData.push({
+                    id: item.id,
+                    nama: item.k,
+                    target: item.tar,
+                    satuan: item.sat,
+                    m1: document.getElementById(`m1_${item.id}`).value || 0,
+                    m2: document.getElementById(`m2_${item.id}`).value || 0,
+                    m3: document.getElementById(`m3_${item.id}`).value || 0,
+                    kendala_user: document.getElementById(`ken_${item.id}`).value
+                });
+            }
+        });
+
+        if(selectedData.length === 0) return alert("Pilih minimal satu IKI!");
+        
+        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyusun Laporan...";
+        btn.disabled = true;
+
+        const prompt = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian.
+        Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
+        Data Realisasi 3 Bulan: ${JSON.stringify(selectedData)}
+
+        Aturan:
+        1. 'latar': Narasi formal tentang tantangan pertanian (iklim/cuaca) wilayah binaan.
+        2. 'tujuan': Deskripsi tujuan laporan evaluasi triwulan.
+        3. 'kesimp': Ringkasan evaluasi capaian triwulanan secara naratif.
+        4. 'items': Iterasi data. 'analisis' jelaskan progres akumulatif 3 bulan. 'tindak' beri solusi teknis spesifik.
+
+        Output wajib JSON murni:
+        {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
+
+        try {
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [{ role: "user", content: prompt }],
+                    response_format: { type: "json_object" }
+                })
+            });
+
+            const result = await response.json();
+            const aiData = JSON.parse(result.choices[0].message.content);
+
+            document.getElementById('out_latar').innerText = aiData.latar;
+            document.getElementById('out_tujuan').innerText = aiData.tujuan;
+            document.getElementById('out_kesimp').innerText = aiData.kesimp;
+
+            aiData.items.forEach(item => {
+                const rCell = document.getElementById(`out_r_${item.id}`);
+                const kCell = document.getElementById(`out_k_${item.id}`);
+                if(rCell) rCell.innerHTML = item.analisis;
+                if(kCell) kCell.innerText = item.tindak;
+            });
+
+            alert("✅ Laporan Triwulan Berhasil Disusun Berdasarkan Data Realisasi!");
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Gagal memproses AI. Pastikan API Key benar dan internet aktif.");
+        } finally {
+            btn.innerHTML = "🚀 GENERATE AI TRIWULAN";
+            btn.disabled = false;
+        }
     }
+
+    window.onload = init;
 </script>
 </body>
 </html>
