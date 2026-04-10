@@ -113,7 +113,7 @@
             </div>
 
             <div class="lg:col-span-3">
-                <label class="text-xs font-bold text-slate-400 uppercase mb-3 block italic">Masukkan Realisasi Per Bulan secara Vertikal:</label>
+                <label class="text-xs font-bold text-slate-400 uppercase mb-3 block italic">Masukkan Jumlah Realisasi Kegiatan Per Bulan dalam Satuan Laporan atau Persen</label>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[700px] overflow-y-auto pr-2" id="input_container"></div>
             </div>
         </div>
@@ -237,10 +237,10 @@
             cont.innerHTML += `<div class="input-card" id="card_${item.id}">
                 <div class="flex items-center gap-2 mb-2"><input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})" class="w-4 h-4"><label class="font-bold text-[10px] text-white">${item.id}. ${item.k}</label></div>
                 <div id="box_${item.id}" class="hidden flex flex-col gap-2">
-                    <input type="number" id="m1_${item.id}" placeholder="Realisasi Bulan I" oninput="updateView()">
-                    <input type="number" id="m2_${item.id}" placeholder="Realisasi Bulan II" oninput="updateView()">
-                    <input type="number" id="m3_${item.id}" placeholder="Realisasi Bulan III" oninput="updateView()">
-                    <textarea id="ken_${item.id}" placeholder="Kendala utama triwulan ini..."></textarea>
+                    <input type="number" id="m1_${item.id}" placeholder="Jml. Realisasi Bln I (Lap/Persen)" oninput="updateView()">
+                    <input type="number" id="m2_${item.id}" placeholder="Jml. Realisasi Bln II (Lap/Persen)" oninput="updateView()">
+                    <input type="number" id="m3_${item.id}" placeholder="Jml. Realisasi Bln III (Lap/Persen)" oninput="updateView()">
+                    <textarea id="ken_${item.id}" placeholder="Kendala utama kegiatan triwulan ini..."></textarea>
                 </div></div>`;
         });
         document.getElementById('in_tanggal').value = "2026-03-31";
