@@ -349,7 +349,7 @@
                 if(kCell) kCell.innerText = item.tindak;
             });
             alert("✅ Laporan Berhasil Disusun!");
-        } catch (error) { alert("Gagal memproses AI."); } 
+        } catch (error) { alert("Gagal memproses AI karena pengguna banyak."); } 
         finally { btn.innerHTML = "🚀 GENERATE AI"; btn.disabled = false; }
     }
     window.onload = init;
