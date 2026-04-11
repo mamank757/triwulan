@@ -194,19 +194,38 @@
         { id: 16, k: "Jumlah Laporan Data Statistik Perkebunan", tar: 3, sat: "Laporan" }
     ];
 
-    function init() {
+   function init() {
         const cont = document.getElementById('input_container');
         ikiRef.forEach((item) => {
             cont.innerHTML += `<div class="input-card" id="card_${item.id}">
-                <div class="flex items-center gap-2 mb-2"><input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})"><label class="text-white text-[10px] font-bold">${item.id}. ${item.k}</label></div>
-                <div id="box_${item.id}" class="hidden flex flex-col gap-2">
-                    <div class="grid grid-cols-3 gap-1">
-                        <input type="number" id="m1_${item.id}" placeholder="Bln I" oninput="updateView()">
-                        <input type="number" id="m2_${item.id}" placeholder="Bln II" oninput="updateView()">
-                        <input type="number" id="m3_${item.id}" placeholder="Bln III" oninput="updateView()">
+                <div class="flex items-start gap-3 mb-3">
+                    <input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})" class="mt-1 w-4 h-4 shrink-0">
+                    <label class="text-white text-[11px] font-bold leading-tight cursor-pointer" for="chk_${item.id}">
+                        ${item.id}. ${item.k}
+                    </label>
+                </div>
+
+                <div id="box_${item.id}" class="hidden flex flex-col gap-3 ml-7">
+                    <div class="space-y-2">
+                        <div>
+                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Bulan I</label>
+                            <input type="number" id="m1_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Bulan II</label>
+                            <input type="number" id="m2_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Bulan III</label>
+                            <input type="number" id="m3_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
+                        </div>
                     </div>
-                    <textarea id="ken_${item.id}" placeholder="Kendala teknis..."></textarea>
-                </div></div>`;
+                    <div>
+                        <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Kendala / Tindak Lanjut</label>
+                        <textarea id="ken_${item.id}" placeholder="Tulis kendala atau deskripsi kegiatan" class="w-full"></textarea>
+                    </div>
+                </div>
+            </div>`;
         });
         sync();
     }
