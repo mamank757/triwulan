@@ -283,21 +283,11 @@
         const prompt = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian.
         Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
         Data Realisasi: ${JSON.stringify(selectedData)}
-        Aturan Penulisan:
-1. Bahasa: Gunakan Bahasa Indonesia formal, teknis, dan objektif.
-2. 'kp' (Kata Pengantar):
-- Wajib terdiri dari 3 paragraf TERPISAH (dipisahkan dengan newline \n\n).
-- Paragraf 1 (Pembuka):
-  Berisi rasa syukur kepada Tuhan Yang Maha Esa, serta penjelasan umum tentang pentingnya laporan kinerja penyuluh pertanian dalam mendukung program Kementerian Pertanian.
-- Paragraf 2 (Isi):
-  Menjelaskan secara ringkas kegiatan yang dilaksanakan berdasarkan data, mencakup pendampingan, capaian, serta peran penyuluh dalam meningkatkan produktivitas dan kesejahteraan petani.
-- Paragraf 3 (Penutup):
-  Berisi harapan, evaluasi umum, serta ucapan terima kasih kepada pihak terkait (petani, pemerintah, dll).
-- Gunakan bahasa formal, panjang, dan naratif (bukan poin-poin).
-- Hindari kalimat terlalu singkat.
-- Gunakan variasi kalimat agar terlihat profesional seperti laporan resmi pemerintah.
-3. 'latar', 'tugas', 'tujuan': Harus mencerminkan kondisi pertanian wilayah setempat dan tupoksi Penyuluh Pertanian sesuai PERMENPAN (perencanaan, pelaksanaan, evaluasi, dan pengembangan metode penyuluhan).
-4. 'items': Iterasi data. 'analisis' jelaskan progres akumulatif 3 bulan. 'tindak' beri solusi teknis spesifik.
+        Aturan:
+        1. 'latar': Narasi formal tentang tantangan pertanian wilayah binaan dan harus mencerminkan kondisi pertanian wilayah setempat dan tupoksi Penyuluh Pertanian sesuai PERMENPAN (perencanaan, pelaksanaan, evaluasi, dan pengembangan metode penyuluhan) (minimal 2 paragraf).
+        2. 'tujuan': Deskripsi tujuan laporan evaluasi triwulan.
+        3. 'kesimp': Ringkasan evaluasi capaian triwulanan secara naratif (minimal 2 paragraf).
+        4. 'items': Iterasi data. 'analisis' jelaskan progres akumulatif 3 bulan. 'tindak' beri solusi teknis spesifik.
         Output wajib JSON murni: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
 
         try {
