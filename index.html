@@ -252,22 +252,54 @@
         updateView();
     }
 
-    function updateView() {
-        const tbT = document.getElementById('out_target_body');
-        const tbM = document.getElementById('out_table_body');
-        tbT.innerHTML = ""; tbM.innerHTML = "";
-        let c = 1;
-        ikiRef.forEach((item) => {
-            if(document.getElementById(`chk_${item.id}`).checked) {
-                const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
-                const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
-                const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
-                const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
-                tbT.innerHTML += `<tr><td>${item.k}</td><td align="center">${item.tar}</td><td align="center"><b>${total}</b></td><td align="center">${item.sat}</td><td align="center">${total >= item.tar ? '✅ TERCAPAI' : '⚠️ BELUM'}</td></tr>`;
-                tbM.innerHTML += `<tr><td align="center">${c++}</td><td class="font-bold">${item.k}</td><td id="out_r_${item.id}">...</td><td id="out_k_${item.id}">-</td></tr>`;
+   function updateView() {
+    const tbT = document.getElementById('out_target_body');
+    const tbM = document.getElementById('out_table_body');
+    const triwulan = document.getElementById('in_triwulan').value; // Ambil nilai triwulan
+    
+    tbT.innerHTML = ""; tbM.innerHTML = "";
+    let c = 1;
+
+    ikiRef.forEach((item) => {
+        if(document.getElementById(`chk_${item.id}`).checked) {
+            // LOGIKA TARGET DINAMIS
+            let targetDinamis = item.tar;
+
+            // Khusus IKI No 16 (Statistik Perkebunan)
+            if (item.id === 16) {
+                if (triwulan === "TRIWULAN I" || triwulan === "TRIWULAN III") {
+                    targetDinamis = 2; // Jan=2, Feb=0, Mar=0 (Total 2) atau Juli=2...
+                } else if (triwulan === "TRIWULAN II" || triwulan === "TRIWULAN IV") {
+                    targetDinamis = 1; // April=1... atau Okt=1...
+                }
             }
-        });
-    }
+
+            // Hitung Realisasi
+            const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
+            const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
+            const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
+            
+            const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
+
+            // Render Tabel Target (Gunakan targetDinamis, bukan item.tar)
+            tbT.innerHTML += `<tr>
+                <td>${item.k}</td>
+                <td align="center">${targetDinamis}</td>
+                <td align="center"><b>${total}</b></td>
+                <td align="center">${item.sat}</td>
+                <td align="center">${total >= targetDinamis ? '✅ TERCAPAI' : '⚠️ BELUM'}</td>
+            </tr>`;
+
+            // Render Tabel Analisis
+            tbM.innerHTML += `<tr>
+                <td align="center">${c++}</td>
+                <td class="font-bold">${item.k}</td>
+                <td id="out_r_${item.id}">...</td>
+                <td id="out_k_${item.id}">-</td>
+            </tr>`;
+        }
+    });
+}
 
     function sync() {
         const val = (id) => document.getElementById(id).value;
