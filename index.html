@@ -6,6 +6,7 @@
     <title>Sistem Laporan Triwulan PPL WAJO - King Mamank</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mamank757/laporantriwulan/99a53aa811aa2ca20fd3c0c0ba2194be56d2b5e6/Gemini_Generated_Image_o9onvjo9onvjo9on%20(1)%20(1).png">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
@@ -55,7 +56,7 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> PPL WAJO REPORT GENERATOR - TRIWULAN (F4)
+            <i class="fa-solid fa-file-invoice"></i> PPL WAJO REPORT GENERATOR - TRIWULAN
         </h2>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             <div class="lg:col-span-1 flex flex-col gap-3"> 
@@ -291,67 +292,86 @@
         }
     }
 
-    async function generateAI() {
-        const btn = document.getElementById('btn-ai');
-        const apiKey = "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"; 
-        btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyusun Laporan...";
-        btn.disabled = true;
+async function generateAI() {
+    const btn = document.getElementById('btn-ai');
+    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyusun Laporan...";
+    btn.disabled = true;
 
-        let selectedData = [];
-        ikiRef.forEach((item) => {
-            if(document.getElementById(`chk_${item.id}`).checked) {
-                selectedData.push({
-                    id: item.id,
-                    nama: item.k,
-                    m1: document.getElementById(`m1_${item.id}`).value || 0,
-                    m2: document.getElementById(`m2_${item.id}`).value || 0,
-                    m3: document.getElementById(`m3_${item.id}`).value || 0,
-                    kendala_user: document.getElementById(`ken_${item.id}`).value
-                });
-            }
+    let selectedData = [];
+    ikiRef.forEach((item) => {
+        if(document.getElementById(`chk_${item.id}`).checked) {
+            selectedData.push({
+                id: item.id,
+                nama: item.k,
+                m1: document.getElementById(`m1_${item.id}`).value || 0,
+                m2: document.getElementById(`m2_${item.id}`).value || 0,
+                m3: document.getElementById(`m3_${item.id}`).value || 0,
+                kendala_user: document.getElementById(`ken_${item.id}`).value
+            });
+        }
+    });
+
+    if(selectedData.length === 0) {
+        btn.innerHTML = "🚀 GENERATE AI";
+        btn.disabled = false;
+        return alert("Pilih minimal satu IKI!");
+    }
+
+    const prompt = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian.
+    Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
+    Data Realisasi: ${JSON.stringify(selectedData)}
+    Aturan:
+    1. 'latar': Narasi formal minimal 2 paragraf mencerminkan kondisi pertanian setempat.
+    2. 'tujuan': Deskripsi tujuan laporan evaluasi.
+    3. 'kesimp': Ringkasan evaluasi capaian (minimal 2 paragraf).
+    4. 'items': Iterasi data. 'analisis' jelaskan progres. 'tindak' beri solusi teknis.
+    Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
+
+    try {
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbzyl6adPq53-R8ehwdg2-ukV0vptJ_DryM7N61BMi9WsEycXMmrj4i7EbTWPIx_X4ws/exec";
+
+        // Menggunakan method POST tanpa no-cors agar bisa membaca response
+        const response = await fetch(webAppUrl, {
+            method: "POST",
+            mode: "cors", // Pastikan cors, bukan no-cors
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8", // Gunakan text/plain untuk menghindari preflight CORS
+            },
+            body: JSON.stringify({ prompt: prompt })
         });
 
-        if(selectedData.length === 0) return alert("Pilih minimal satu IKI!");
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const result = await response.json();
+        
+        // Mengambil data dari response Apps Script (struktur Gemini)
+       let rawContent = result.candidates[0].content.parts[0].text;
+// Bersihkan jika ada bungkus markdown ```json
+rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
+const aiData = JSON.parse(rawContent);
 
-        // --- KEMBALIKAN CONST PROMPT DISINI ---
-        const prompt = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian.
-        Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
-        Data Realisasi: ${JSON.stringify(selectedData)}
-        Aturan:
-        1. 'latar': Narasi formal tentang tantangan pertanian wilayah binaan dan harus mencerminkan kondisi pertanian wilayah setempat dan tupoksi Penyuluh Pertanian sesuai PERMENPAN (perencanaan, pelaksanaan, evaluasi, dan pengembangan metode penyuluhan) (minimal 2 paragraf).
-        2. 'tujuan': Deskripsi tujuan laporan evaluasi triwulan.
-        3. 'kesimp': Ringkasan evaluasi capaian triwulanan secara naratif (minimal 2 paragraf).
-        4. 'items': Iterasi data. 'analisis' jelaskan progres akumulatif 3 bulan. 'tindak' beri solusi teknis spesifik.
-        Output wajib JSON murni: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
+        // Isi ke elemen HTML
+        document.getElementById('out_latar').innerText = aiData.latar;
+        document.getElementById('out_tujuan').innerText = aiData.tujuan;
+        document.getElementById('out_kesimp').innerText = aiData.kesimp;
 
-        try {
-            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [{ role: "user", content: prompt }],
-                    response_format: { type: "json_object" }
-                })
-            });
+        aiData.items.forEach(item => {
+            const rCell = document.getElementById(`out_r_${item.id}`);
+            const kCell = document.getElementById(`out_k_${item.id}`);
+            if(rCell) rCell.innerText = item.analisis;
+            if(kCell) kCell.innerText = item.tindak;
+        });
 
-            const result = await response.json();
-            const aiData = JSON.parse(result.choices[0].message.content);
+        alert("✅ Laporan Berhasil Disusun!");
 
-            document.getElementById('out_latar').innerText = aiData.latar;
-            document.getElementById('out_tujuan').innerText = aiData.tujuan;
-            document.getElementById('out_kesimp').innerText = aiData.kesimp;
-
-            aiData.items.forEach(item => {
-                const rCell = document.getElementById(`out_r_${item.id}`);
-                const kCell = document.getElementById(`out_k_${item.id}`);
-                if(rCell) rCell.innerText = item.analisis;
-                if(kCell) kCell.innerText = item.tindak;
-            });
-            alert("✅ Laporan Berhasil Disusun!");
-        } catch (error) { alert("Gagal memproses AI karena pengguna banyak."); } 
-        finally { btn.innerHTML = "🚀 GENERATE AI"; btn.disabled = false; }
+    } catch (error) {
+        console.error(error);
+        alert("Gagal memproses AI. Pastikan Apps Script sudah di-deploy sebagai 'Anyone'.");
+    } finally {
+        btn.innerHTML = "🚀 GENERATE AI";
+        btn.disabled = false;
     }
+}
     window.onload = init;
 </script>
 </body>
