@@ -8,6 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/mamank757/laporantriwulan/99a53aa811aa2ca20fd3c0c0ba2194be56d2b5e6/Gemini_Generated_Image_o9onvjo9onvjo9on%20(1)%20(1).png">
     <style>
+    /* Update CSS Identitas Sampul */
+.grid-identity { 
+    display: grid; 
+    grid-template-columns: 160px 15px 1fr; /* Lebar kolom label dikunci */
+    gap: 8px; 
+    text-align: left; 
+    margin-bottom: 5px;
+}
+.grid-identity span { white-space: normal; word-break: break-word; }
+
+/* Perbaikan Table Break */
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+thead { display: table-header-group; } /* Munculkan header di tiap halaman baru */
+tr { page-break-inside: auto; }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
         
         body { background: #0f172a; color: #f1f5f9; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
@@ -21,8 +35,18 @@
             box-sizing: border-box; display: flex; flex-direction: column;
         }
 
-        /* NOMOR HALAMAN DIKUNCI DI BAWAH */
-        .page-number { position: absolute; bottom: 10mm; left: 50%; transform: translateX(-50%); font-size: 10pt; z-index: 10; }
+      /* Update Nomor Halaman: Kunci posisi agar tidak lari */
+.page-number { 
+    position: absolute; 
+    bottom: 10mm; /* Kunci 1cm dari bawah kertas */
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-family: 'Times New Roman', serif;
+    font-size: 11pt;
+    color: black;
+    z-index: 10;
+}
         
         /* FIX TABEL BREAK & MARGIN */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 8.5pt; table-layout: fixed; page-break-inside: auto; }
@@ -37,12 +61,31 @@
         .name-line { font-weight: bold; text-transform: uppercase; border-bottom: 1px solid black; display: inline-block; padding: 0 5px; position: relative; z-index: 5; }
 
         @media print {
-            @page { size: 215mm 330mm; margin: 20mm 15mm; }
-            .no-print { display: none !important; }
-            body { background: white; padding: 0; }
-            .page { margin: 0; box-shadow: none; width: 100%; min-height: initial; height: auto; padding: 0; page-break-after: always; overflow: visible !important; display: block; }
-            .sampul-page { display: flex !important; min-height: 290mm !important; flex-direction: column !important; justify-content: space-between !important; padding: 20mm 0 !important; }
-        }
+    @page { 
+        size: 215mm 330mm; 
+        margin: 0; /* Margin nol karena sudah diatur di .page */
+    }
+    .no-print { display: none !important; }
+    body { background: white; padding: 0; margin: 0; }
+    
+    .page { 
+        margin: 0 auto !important; 
+        box-shadow: none !important; 
+        width: 215mm !important; 
+        height: 330mm !important; /* WAJIB: Kunci tinggi agar nomor halaman tidak naik */
+        page-break-after: always !important; 
+        display: block !important;
+        position: relative !important;
+    }
+    
+    /* Khusus sampul agar konten tetap proporsional */
+    .sampul-page { 
+        display: flex !important; 
+        flex-direction: column !important; 
+        justify-content: space-between !important; 
+        padding: 20mm 0 !important; 
+    }
+}
 
         .no-print-area { background: #1e293b; border-radius: 15px; padding: 25px; border: 1px solid #334155; }
         .input-card { background: #334155; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #475569; }
@@ -140,12 +183,12 @@
                 <p class="text-lg font-bold" id="out_jabatan_cover">PENYULUH PERTANIAN</p>
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_Kementerian_Pertanian_Republik_Indonesia.svg/3840px-Logo_Kementerian_Pertanian_Republik_Indonesia.svg.png" class="w-48 mx-auto">
-            <div class="max-w-md mx-auto text-left pl-10 space-y-3 uppercase text-sm">
-                <div class="grid grid-cols-3 gap-x-2"><span>NAMA</span><span class="col-span-2">: <b id="out_nama_cover">-</b></span></div>
-                <div class="grid grid-cols-3 gap-x-2"><span>NIP</span><span class="col-span-2">: <span id="out_nip_cover">-</span></span></div>
-                <div class="grid grid-cols-3 gap-x-2"><span>WKPP</span><span class="col-span-2">: <span id="out_wkpp_cover">-</span></span></div>
-                <div class="grid grid-cols-3 gap-x-2"><span>BPP WILAYAH</span><span class="col-span-2">: <span id="out_bpp_cover">-</span></span></div>
-            </div>
+            <div class="max-w-md mx-auto uppercase text-sm font-bold">
+    <div class="grid-identity"><span>NAMA</span><span>:</span><span id="out_nama_cover">-</span></div>
+    <div class="grid-identity"><span>NIP</span><span>:</span><span id="out_nip_cover">-</span></div>
+    <div class="grid-identity"><span>WKPP</span><span>:</span><span id="out_wkpp_cover">-</span></div>
+    <div class="grid-identity"><span>BPP WILAYAH</span><span>:</span><span id="out_bpp_cover">-</span></div>
+</div>
         </div>
         <div class="font-bold uppercase space-y-1">
             <p>KEMENTERIAN PERTANIAN</p>
@@ -155,7 +198,27 @@
         </div>
         <div class="page-number" style="display:none;"></div>
     </div>
-
+<div class="page">
+    <h2 class="text-center font-bold text-lg uppercase mb-10">DAFTAR ISI</h2>
+    <div class="px-10">
+        <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
+            <span style="flex-grow: 1; border-bottom: 1px dotted black;">HALAMAN SAMPUL</span><span>i</span>
+        </div>
+        <div style="display: flex; align-items: baseline; margin-bottom: 8px;">
+            <span style="flex-grow: 1; border-bottom: 1px dotted black;">DAFTAR ISI</span><span>ii</span>
+        </div>
+        <div style="display: flex; align-items: baseline; margin-bottom: 8px; font-weight: bold; margin-top: 15px;">
+            <span style="flex-grow: 1; border-bottom: 1px dotted black;">BAB I. PENDAHULUAN</span><span>1</span>
+        </div>
+        <div style="display: flex; align-items: baseline; margin-bottom: 8px; font-weight: bold; margin-top: 15px;">
+            <span style="flex-grow: 1; border-bottom: 1px dotted black;">BAB II. PEMBAHASAN</span><span>2</span>
+        </div>
+        <div style="display: flex; align-items: baseline; margin-bottom: 8px; font-weight: bold; margin-top: 15px;">
+            <span style="flex-grow: 1; border-bottom: 1px dotted black;">BAB III. KESIMPULAN</span><span>3</span>
+        </div>
+    </div>
+    <div class="page-number">ii</div>
+</div>
     <div class="page">
         <h2 class="text-center font-bold text-lg uppercase mb-8">BAB I. PENDAHULUAN</h2>
         <h3 class="font-bold text-sm uppercase">1.1. Latar Belakang</h3>
@@ -382,10 +445,11 @@ async function generateAI() {
     Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
     Data Realisasi: ${JSON.stringify(selectedData)}
     Aturan:
-    1. 'latar': Narasi formal minimal 2 paragraf.
+    1. 'latar': Narasi formal 3 paragraf.
     2. 'tujuan': Deskripsi tujuan laporan.
-    3. 'kesimp': Ringkasan evaluasi (minimal 2 paragraf).
+    3. 'kesimp': Ringkasan evaluasi 3 paragraf.
     4. 'items': Iterasi data. 'analisis' jelaskan progres. 'tindak' beri solusi teknis.
+    5. Gunakan sudut pandang penulis. Jangan sebut nama penyuluh di dalam narasi.
     Output wajib JSON murni: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
 
     try {
