@@ -52,7 +52,31 @@
     </style>
 </head>
 <body>
+<div id="browser-warning" class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/90 backdrop-blur-md no-print p-4">
+    <div class="bg-slate-800 p-6 sm:p-8 rounded-3xl border border-emerald-500/50 max-w-md w-full max-h-[90vh] overflow-y-auto text-center shadow-2xl ring-1 ring-white/10 custom-scrollbar">
+        
+       <h3 class="text-xl font-bold text-white mb-3">Informasi Penggunaan</h3>
+        <div class="mb-4">
+            <img src="https://github.com/mamank757/laporanbola/blob/d0a50483d98999dce2a925f3e93d627168c2e360/ChatGPT%20Image%2030%20Mar%202026,%2002.51.28.png?raw=true" 
+                 alt="Panduan" 
+                 class="w-full max-h-40 object-contain rounded-2xl border border-white/10 shadow-lg bg-slate-900">
+        </div>
 
+        
+        
+        <div class="text-slate-300 mb-8 text-sm leading-relaxed space-y-3">
+            <p>Gunakan dgn bijak <b>Generating</b> laporan SKP Triwulan dari <b>Mamank.</b> Follow TikTok saya: <b>King Mamank</b>.</p>
+            <p class="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/30 text-sm md:text-base text-emerald-50 text-left">
+                <i class="fa-solid fa-robot mr-2 text-emerald-400"></i> 
+                <b class="text-white"></b> Utk hasil cetak laporan yg optimal, gunakan <b>HP Android</b> atau <b>Laptop</b> dgn browser <b>Google Chrome.</b> Jika Generating AI</b> gagal krn trafik padat. Coba lagi beberapa saat, <b>jangan</b> <i>refresh</i> halaman.
+            </p>
+        </div>
+
+        <button onclick="closeWarning()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-2xl transition-all duration-300 active:scale-95 shadow-lg shadow-emerald-900/20">
+            SAYA MENGERTI
+        </button>
+    </div>
+</div>
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
@@ -191,6 +215,9 @@
 </div>
 
 <script>
+    function closeWarning() {
+    document.getElementById('browser-warning').style.display = 'none';
+}
     const ikiRef = [
         { id: 1, k: "Jumlah Laporan Luas Tambah Tanam (Padi, Jagung, Kedelai)", tar: 3, sat: "Laporan" },
         { id: 2, k: "Persentase Pendampingan Produksi Hortikultura", tar: 100, sat: "%" },
@@ -360,7 +387,7 @@ async function generateAI() {
     Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
 
     try {
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbzyl6adPq53-R8ehwdg2-ukV0vptJ_DryM7N61BMi9WsEycXMmrj4i7EbTWPIx_X4ws/exec";
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxu2KU5wUK48cyH7ngauFVDGS59j8YNhAq211R6tKR0_iAS8uBV7CJeol0APrcUmgARBA/exec";
 
         // Menggunakan method POST tanpa no-cors agar bisa membaca response
         const response = await fetch(webAppUrl, {
