@@ -436,19 +436,23 @@ function updateDataPenyuluh() {
 }
 
     function sync() {
-        const val = (id) => document.getElementById(id).value;
-        document.getElementById('out_tri_cover').innerText = val('in_triwulan');
-        document.getElementById('out_nama_cover').innerText = val('in_nama') || "-";
-        document.getElementById('out_nip_cover').innerText = val('in_nip') || "-";
-        document.getElementById('out_wkpp_cover').innerText = (val('in_wkpp') || "-").toUpperCase();
-        document.getElementById('out_bpp_cover').innerText = (val('in_bpp') || "-").toUpperCase();
-        document.getElementById('out_nama_sig').innerText = val('in_nama') || "-";
-        document.getElementById('out_nip_sig').innerText = val('in_nip') || "-";
-        const date = val('in_tanggal') ? new Date(val('in_tanggal')).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : "...";
-        document.getElementById('out_lokasi_tgl').innerText = `${val('in_bpp') || "Bola"}, ${date}`;
-        updateView();
-    }
-
+    const val = (id) => document.getElementById(id).value;
+    document.getElementById('out_tri_cover').innerText = val('in_triwulan');
+    
+    // TAMBAHKAN BARIS INI:
+    document.getElementById('out_jabatan_cover').innerText = (val('in_jabatan') || "PENYULUH PERTANIAN").toUpperCase();
+    
+    document.getElementById('out_nama_cover').innerText = val('in_nama') || "-";
+    document.getElementById('out_nip_cover').innerText = val('in_nip') || "-";
+    document.getElementById('out_wkpp_cover').innerText = (val('in_wkpp') || "-").toUpperCase();
+    document.getElementById('out_bpp_cover').innerText = (val('in_bpp') || "-").toUpperCase();
+    document.getElementById('out_nama_sig').innerText = val('in_nama') || "-";
+    document.getElementById('out_nip_sig').innerText = val('in_nip') || "-";
+    
+    const date = val('in_tanggal') ? new Date(val('in_tanggal')).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : "...";
+    document.getElementById('out_lokasi_tgl').innerText = `${val('in_bpp') || "Bola"}, ${date}`;
+    updateView();
+}
     function handleTTD(input) {
         const img = document.getElementById('out_ttd_img');
         if (input.files && input.files[0]) {
