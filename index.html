@@ -487,15 +487,21 @@ async function generateAI() {
         return alert("Pilih minimal satu IKI!");
     }
 
-    const prompt = `Anda adalah PPL Pertanian Profesional. Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian sesuai tahun ini (waktu pembuatan laporan ini).
-    Data Penyuluh: ${document.getElementById('in_nama').value}, BPP: ${document.getElementById('in_bpp').value}, Periode: ${document.getElementById('in_triwulan').value}.
-    Data Realisasi: ${JSON.stringify(selectedData)}
-    Aturan:
-    1. 'latar': Narasi formal minimal 2 paragraf mencerminkan kondisi pertanian setempat.
-    2. 'tujuan': Deskripsi tujuan laporan evaluasi.
-    3. 'kesimp': Ringkasan evaluasi capaian (minimal 2 paragraf).
-    4. 'items': Iterasi data. 'analisis' jelaskan progres. 'tindak' beri solusi teknis.
-    Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
+  // Ambil tahun saat ini secara otomatis
+const tahunSekarang = new Date().getFullYear(); 
+
+const prompt = `Anda adalah PPL Pertanian Profesional. 
+Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian untuk TAHUN ${tahunSekarang}.
+Data Penyuluh: ${document.getElementById('in_nama').value}, 
+BPP: ${document.getElementById('in_bpp').value}, 
+Periode: ${document.getElementById('in_triwulan').value}.
+Data Realisasi: ${JSON.stringify(selectedData)}
+Aturan:
+1. 'latar': Narasi formal minimal 2 paragraf mencerminkan kondisi pertanian tahun ${tahunSekarang}.
+2. 'tujuan': Deskripsi tujuan laporan evaluasi.
+3. 'kesimp': Ringkasan evaluasi capaian (minimal 2 paragraf).
+4. 'items': Iterasi data. 'analisis' jelaskan progres. 'tindak' beri solusi teknis.
+Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
 
     try {
         const webAppUrl = "https://script.google.com/macros/s/AKfycbwpBSTb0mEMmvJM_oAMefVAFfksxezjqVwktc58Ds9k8cCsmhr8_JlNMJxC_pDOBoUz/exec";
