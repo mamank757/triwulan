@@ -343,58 +343,54 @@
 </div>
 
 <script>
-     function closeWarning() {
-    document.getElementById('browser-warning').style.display = 'none';
-}
- function applySmartBreak() {
-    const container = document.querySelector('.report-container');
-    const tableBody = document.getElementById('out_table_body');
-    if (!container || !tableBody) return; 
+    // 1. DAFTAR BLOKIR NIP
+    const daftarNipTerblokir = ["199409042020122001"];
 
-    const rows = Array.from(tableBody.querySelectorAll('tr'));
+    function closeWarning() {
+        document.getElementById('browser-warning').style.display = 'none';
+    }
+
+    function applySmartBreak() {
+        const container = document.querySelector('.report-container');
+        const tableBody = document.getElementById('out_table_body');
+        if (!container || !tableBody) return;
+
+        const rows = Array.from(tableBody.querySelectorAll('tr'));
+        document.querySelectorAll('.page-extra').forEach(p => p.remove());
+
+        const maxHeight = 850;
+        let currentHeight = 0;
+        let currentTableBody = tableBody;
+
+        rows.forEach((row) => {
+            const rowHeight = row.offsetHeight;
+            if (currentHeight + rowHeight > maxHeight) {
+                const newPage = document.createElement('div');
+                newPage.className = "page auto-height page-extra";
+                newPage.innerHTML = `
+                    <p class="font-bold mb-4 italic text-sm text-gray-500">Lanjutan Matriks Analisis Capaian Kinerja</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No</th>
+                                <th style="width: 30%;">Komponen IKI</th>
+                                <th style="width: 40%;">Analisis Kinerja</th>
+                                <th style="width: 30%;">Kendala & Tindak Lanjut</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="page-number">2</div>`;
+                const pages = container.querySelectorAll('.page');
+                container.insertBefore(newPage, pages[pages.length - 1]);
+                currentTableBody = newPage.querySelector('tbody');
+                currentHeight = 0;
+            }
+            currentTableBody.appendChild(row);
+            currentHeight += row.offsetHeight;
+        });
+    }
     
-    // Bersihkan potongan halaman lama
-    document.querySelectorAll('.page-extra').forEach(p => p.remove());
-
-    const maxHeight = 850; 
-    let currentHeight = 0;
-    let currentTableBody = tableBody;
-
-    rows.forEach((row) => {
-        const rowHeight = row.offsetHeight;
-
-        if (currentHeight + rowHeight > maxHeight) {
-            const newPage = document.createElement('div');
-            newPage.className = "page auto-height page-extra";
-            
-            newPage.innerHTML = `
-                <p class="font-bold mb-4 italic text-sm text-gray-500">Lanjutan Matriks Analisis Capaian Kinerja</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 30px;">No</th>
-                            <th style="width: 30%;">Komponen IKI</th>
-                            <th style="width: 40%;">Analisis Kinerja</th>
-                            <th style="width: 30%;">Kendala & Tindak Lanjut</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <div class="page-number">2</div>`;
-            
-            // PERBAIKAN DI SINI: Sisipkan SEBELUM halaman terakhir (Bab III)
-            const pages = container.querySelectorAll('.page');
-            container.insertBefore(newPage, pages[pages.length - 1]);
-            
-            currentTableBody = newPage.querySelector('tbody');
-            currentHeight = 0;
-        }
-        
-        currentTableBody.appendChild(row);
-        currentHeight += row.offsetHeight;
-    });
-}
-
 const dataPenyuluh = {
     "ABDUL RAHMAN, SP": {
         nip: "199009202020121001",
@@ -407,10 +403,7 @@ const dataPenyuluh = {
     "ANDI LUTHFIAH, SP": {
         nip: "199307162020122003",
         wilayah: "DESA MANNAGAE & DESA ASSORAJANG"
-    },
-    "FITRIYANTI HASNURI, S.TP": {
-        nip: "199409042020122001",
-        wilayah: "DESA ONGKOE"
+    
     },
     "INDRA YULIANA, S.TP., M.Si.": {
         nip: "199307062020122001",
@@ -470,58 +463,43 @@ const dataPenyuluh = {
         { id: 16, k: "Jumlah Laporan Data Statistik Perkebunan", tar: 3, sat: "Laporan" }
     ];
 
-   function init() {
+    function validasiNipTriwulan() {
+        const nipInput = document.getElementById('in_nip');
+        const btnAi = document.getElementById('btn-ai');
+        const val = nipInput.value.trim();
+        
+        if (daftarNipTerblokir.includes(val)) {
+            btnAi.style.backgroundColor = "#991b1b";
+            btnAi.innerHTML = "🚫 AKSES DIBLOKIR";
+            btnAi.disabled = true;
+            nipInput.style.color = "red";
+        } else {
+            btnAi.style.backgroundColor = "";
+            btnAi.innerHTML = "🚀 GENERATE AI";
+            btnAi.disabled = false;
+            nipInput.style.color = "";
+        }
+    }
+
+    function init() {
         const cont = document.getElementById('input_container');
+        cont.innerHTML = "";
         ikiRef.forEach((item) => {
             cont.innerHTML += `<div class="input-card" id="card_${item.id}">
                 <div class="flex items-start gap-3 mb-3">
                     <input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})" class="mt-1 w-4 h-4 shrink-0">
-                    <label class="text-white text-[11px] font-bold leading-tight cursor-pointer" for="chk_${item.id}">
-                        ${item.id}. ${item.k}
-                    </label>
+                    <label class="text-white text-[11px] font-bold leading-tight cursor-pointer" for="chk_${item.id}">${item.id}. ${item.k}</label>
                 </div>
-
                 <div id="box_${item.id}" class="hidden flex flex-col gap-3 ml-7">
-                    <div class="space-y-2">
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Capaian Bulan I</label>
-                            <input type="number" id="m1_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Capaian Bulan II</label>
-                            <input type="number" id="m2_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
-                        </div>
-                        <div>
-                            <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Capaian Bulan III</label>
-                            <input type="number" id="m3_${item.id}" placeholder="Realisasi (angka saja, persen tulis 100)" oninput="updateView()" class="w-full">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-[10px] text-slate-400 block mb-1 uppercase tracking-wider">Kendala / Tindak Lanjut</label>
-                        <textarea id="ken_${item.id}" placeholder="Tulis singkat kendala atau deskripsi kegiatan secara umum" class="w-full"></textarea>
-                    </div>
+                    <input type="number" id="m1_${item.id}" placeholder="Bulan I" oninput="updateView()">
+                    <input type="number" id="m2_${item.id}" placeholder="Bulan II" oninput="updateView()">
+                    <input type="number" id="m3_${item.id}" placeholder="Bulan III" oninput="updateView()">
+                    <textarea id="ken_${item.id}" placeholder="Kendala/Tindak Lanjut"></textarea>
                 </div>
             </div>`;
         });
         sync();
     }
-function updateDataPenyuluh() {
-    const nama = document.getElementById('in_nama').value;
-    const data = dataPenyuluh[nama];
-    
-    if (data) {
-        // Isi NIP otomatis
-        document.getElementById('in_nip').value = data.nip;
-        // Isi WKPP otomatis
-        document.getElementById('in_wkpp').value = data.wilayah;
-        
-        // Khusus untuk Bapak (Abdul Rahman), BPP otomatis terisi "BOLA"
-        if (nama === "ABDUL RAHMAN, SP") {
-            document.getElementById('in_bpp').value = "BOLA";
-        }
-    }
-    sync(); // Jalankan sinkronisasi untuk memperbarui tampilan laporan/cover
-}
 
     function toggle(id) {
         document.getElementById(`box_${id}`).classList.toggle('hidden', !document.getElementById(`chk_${id}`).checked);
@@ -529,162 +507,142 @@ function updateDataPenyuluh() {
         updateView();
     }
 
-   function updateView() {
-    const tbT = document.getElementById('out_target_body');
-    const tbM = document.getElementById('out_table_body');
-    const triwulan = document.getElementById('in_triwulan').value; // Ambil nilai triwulan
-    
-    tbT.innerHTML = ""; tbM.innerHTML = "";
-    let c = 1;
+    function sync() {
+        const val = (id) => document.getElementById(id).value;
+        
+        // Cek data otomatis jika nama dipilih
+        const namaInput = val('in_nama');
+        if(dataPenyuluh[namaInput]) {
+            document.getElementById('in_nip').value = dataPenyuluh[namaInput].nip;
+            document.getElementById('in_wkpp').value = dataPenyuluh[namaInput].wilayah;
+        }
 
-    ikiRef.forEach((item) => {
-        if(document.getElementById(`chk_${item.id}`).checked) {
-            // LOGIKA TARGET DINAMIS
-            let targetDinamis = item.tar;
+        // Sinkronisasi ke Cover & TTD
+        document.getElementById('out_tri_cover').innerText = val('in_triwulan');
+        document.getElementById('out_nama_cover').innerText = val('in_nama') || "-";
+        document.getElementById('out_nip_cover').innerText = val('in_nip') || "-";
+        document.getElementById('out_wkpp_cover').innerText = (val('in_wkpp') || "-").toUpperCase();
+        document.getElementById('out_bpp_cover').innerText = (val('in_bpp') || "-").toUpperCase();
+        document.getElementById('out_nama_sig').innerText = val('in_nama') || "-";
+        document.getElementById('out_nip_sig').innerText = val('in_nip') || "-";
+        
+        const date = val('in_tanggal') ? new Date(val('in_tanggal')).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : "...";
+        document.getElementById('out_lokasi_tgl').innerText = `${val('in_bpp') || "Bola"}, ${date}`;
 
-            // Khusus IKI No 16 (Statistik Perkebunan)
-            if (item.id === 16) {
-                if (triwulan === "TRIWULAN I" || triwulan === "TRIWULAN III") {
-                    targetDinamis = 2; // Jan=2, Feb=0, Mar=0 (Total 2) atau Juli=2...
-                } else if (triwulan === "TRIWULAN II" || triwulan === "TRIWULAN IV") {
-                    targetDinamis = 1; // April=1... atau Okt=1...
+        // Kontrol Koordinator
+        const showKoor = document.getElementById('show_koordinator').checked;
+        document.getElementById('col_koor').classList.toggle('hidden', !showKoor);
+        document.getElementById('input_koordinator_area').classList.toggle('hidden', !showKoor);
+        if (showKoor) {
+            document.getElementById('out_nama_koor_sig').innerText = val('in_nama_koor') || "-";
+            document.getElementById('out_nip_koor_sig').innerText = val('in_nip_koor') || "-";
+        }
+
+        validasiNipTriwulan();
+        updateView();
+    }
+
+    function updateView() {
+        const tbT = document.getElementById('out_target_body');
+        const tbM = document.getElementById('out_table_body');
+        const triwulan = document.getElementById('in_triwulan').value;
+        tbT.innerHTML = ""; tbM.innerHTML = "";
+        let c = 1;
+
+        ikiRef.forEach((item) => {
+            if(document.getElementById(`chk_${item.id}`).checked) {
+                let targetDinamis = item.tar;
+                if (item.id === 16) {
+                    targetDinamis = (triwulan === "TRIWULAN I" || triwulan === "TRIWULAN III") ? 2 : 1;
                 }
+                const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
+                const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
+                const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
+                const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
+
+                tbT.innerHTML += `<tr><td>${item.k}</td><td align="center">${targetDinamis}</td><td align="center">${total}</td><td align="center">${item.sat}</td><td align="center">${total >= targetDinamis ? '✅' : '⚠️'}</td></tr>`;
+                tbM.innerHTML += `<tr><td align="center">${c++}</td><td class="font-bold">${item.k}</td><td id="out_r_${item.id}">...</td><td id="out_k_${item.id}">-</td></tr>`;
             }
-
-            // Hitung Realisasi
-            const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
-            const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
-            const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
-            
-            const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
-
-            // Render Tabel Target (Gunakan targetDinamis, bukan item.tar)
-            tbT.innerHTML += `<tr>
-                <td>${item.k}</td>
-                <td align="center">${targetDinamis}</td>
-                <td align="center"><b>${total}</b></td>
-                <td align="center">${item.sat}</td>
-                <td align="center">${total >= targetDinamis ? '✅ TERCAPAI' : '⚠️ BELUM'}</td>
-            </tr>`;
-
-            // Render Tabel Analisis
-            tbM.innerHTML += `<tr>
-                <td align="center">${c++}</td>
-                <td class="font-bold">${item.k}</td>
-                <td id="out_r_${item.id}">...</td>
-                <td id="out_k_${item.id}">-</td>
-            </tr>`;
-        }
-    });
-}
-
- function sync() {
-    const val = (id) => document.getElementById(id).value;
-    
-    // Data Dasar (Kode Bapak yang lama)
-    document.getElementById('out_tri_cover').innerText = val('in_triwulan');
-    document.getElementById('out_jabatan_cover').innerText = (val('in_jabatan') || "PENYULUH PERTANIAN").toUpperCase();
-    document.getElementById('out_nama_cover').innerText = val('in_nama') || "-";
-    document.getElementById('out_nip_cover').innerText = val('in_nip') || "-";
-    document.getElementById('out_wkpp_cover').innerText = (val('in_wkpp') || "-").toUpperCase();
-    document.getElementById('out_bpp_cover').innerText = (val('in_bpp') || "-").toUpperCase();
-    document.getElementById('out_nama_sig').innerText = val('in_nama') || "-";
-    document.getElementById('out_nip_sig').innerText = val('in_nip') || "-";
-    
-    const date = val('in_tanggal') ? new Date(val('in_tanggal')).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : "...";
-    document.getElementById('out_lokasi_tgl').innerText = `${val('in_bpp') || "Bola"}, ${date}`;
-
-    // LOGIKA KOORDINATOR BARU
-    const showKoor = document.getElementById('show_koordinator').checked;
-    const colKoor = document.getElementById('col_koor');
-    const inputArea = document.getElementById('input_koordinator_area');
-
-    if (showKoor) {
-        colKoor.classList.remove('hidden');
-        inputArea.classList.remove('hidden');
-        document.getElementById('out_nama_koor_sig').innerText = val('in_nama_koor') || "-";
-        document.getElementById('out_nip_koor_sig').innerText = val('in_nip_koor') || "-";
-    } else {
-        colKoor.classList.add('hidden');
-        inputArea.classList.add('hidden');
+        });
     }
 
-    updateView();
-}
-    function handleTTD(input) {
-        const img = document.getElementById('out_ttd_img');
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = (e) => { img.src = e.target.result; img.classList.remove('hidden'); };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-async function generateAI() {
+    async function generateAI() {
+    // 1. Ambil nilai NIP dan Elemen Tombol
+    const nipVal = document.getElementById('in_nip').value.trim();
     const btn = document.getElementById('btn-ai');
-    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Menyusun Laporan, Tunggu Beberapa Saat...";
-    btn.disabled = true;
 
+    // 2. Logika Blokir NIP
+    if (daftarNipTerblokir.includes(nipVal)) {
+        alert("Akses AI ditangguhkan untuk NIP ini. Silakan hubungi King Mamank.");
+        return;
+    }
+
+    if (!nipVal) {
+        alert("Silakan masukkan NIP terlebih dahulu!");
+        return;
+    }
+
+    // 3. Kumpulkan Data yang Dipilih
     let selectedData = [];
     ikiRef.forEach((item) => {
-        if(document.getElementById(`chk_${item.id}`).checked) {
+        const chk = document.getElementById(`chk_${item.id}`);
+        if(chk && chk.checked) {
             selectedData.push({
-                id: item.id,
+                id: item.id, 
                 nama: item.k,
                 m1: document.getElementById(`m1_${item.id}`).value || 0,
                 m2: document.getElementById(`m2_${item.id}`).value || 0,
                 m3: document.getElementById(`m3_${item.id}`).value || 0,
-                kendala_user: document.getElementById(`ken_${item.id}`).value
+                kendala_user: document.getElementById(`ken_${item.id}`).value || "-"
             });
         }
     });
 
     if(selectedData.length === 0) {
-        btn.innerHTML = "🚀 GENERATE AI";
-        btn.disabled = false;
         return alert("Pilih minimal satu IKI!");
     }
 
-  // Ambil tahun saat ini secara otomatis
-const tahunSekarang = new Date().getFullYear(); 
-
-const prompt = `Anda adalah PPL Pertanian Profesional. 
+    // 4. Buat Narasi Prompt
+    const tahunSekarang = new Date().getFullYear(); 
+    const narasiPrompt = `Anda adalah PPL Pertanian Profesional. 
 Tugas: Menyusun laporan TRIWULAN formal standar Kementerian Pertanian untuk TAHUN ${tahunSekarang}.
 Data Penyuluh: ${document.getElementById('in_nama').value}, 
 BPP: ${document.getElementById('in_bpp').value}, 
 Periode: ${document.getElementById('in_triwulan').value}.
 Data Realisasi: ${JSON.stringify(selectedData)}
 Aturan:
-1. 'latar': Narasi formal minimal 2 paragraf mencerminkan kondisi pertanian tahun ${tahunSekarang}.
-2. 'tujuan': Deskripsi tujuan laporan evaluasi.
-3. 'kesimp': Ringkasan evaluasi capaian (minimal 2 paragraf).
-4. 'items': Iterasi data. 'analisis' jelaskan progres. 'tindak' beri solusi teknis.
+1. 'latar': Narasi formal minimal 2 paragraf.
+2. 'tujuan': Deskripsi tujuan laporan.
+3. 'kesimp': Ringkasan evaluasi.
+4. 'items': Analisis progres dan solusi teknis.
 Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "items":[{"id":1, "analisis":"", "tindak":""}]}`;
+
+    // 5. Eksekusi ke Google Apps Script
+    btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Ai sedang menyusun laporan...";
+    btn.disabled = true;
 
     try {
         const webAppUrl = "https://script.google.com/macros/s/AKfycbwpBSTb0mEMmvJM_oAMefVAFfksxezjqVwktc58Ds9k8cCsmhr8_JlNMJxC_pDOBoUz/exec";
 
-        // Menggunakan method POST tanpa no-cors agar bisa membaca response
         const response = await fetch(webAppUrl, {
             method: "POST",
-            mode: "cors", // Pastikan cors, bukan no-cors
-            headers: {
-                "Content-Type": "text/plain;charset=utf-8", // Gunakan text/plain untuk menghindari preflight CORS
-            },
-            body: JSON.stringify({ prompt: prompt })
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ prompt: narasiPrompt }) // Variabel sudah disamakan
         });
 
-        if (!response.ok) throw new Error('Network response was not ok');
+        if (!response.ok) throw new Error('Gagal terhubung ke Server AI');
         
         const result = await response.json();
         
-        // Mengambil data dari response Apps Script (struktur Gemini)
-       let rawContent = result.candidates[0].content.parts[0].text;
-// Bersihkan jika ada bungkus markdown ```json
-rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
-const aiData = JSON.parse(rawContent);
+        if (!result.candidates || !result.candidates[0]) {
+            throw new Error("Respon AI kosong. Cek API Key di Apps Script.");
+        }
 
-        // Isi ke elemen HTML
+        let rawContent = result.candidates[0].content.parts[0].text;
+        rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
+        const aiData = JSON.parse(rawContent);
+
+        // 6. Isi ke Tabel Hasil
         document.getElementById('out_latar').innerText = aiData.latar;
         document.getElementById('out_tujuan').innerText = aiData.tujuan;
         document.getElementById('out_kesimp').innerText = aiData.kesimp;
@@ -697,28 +655,14 @@ const aiData = JSON.parse(rawContent);
         });
 
         alert("✅ Laporan Berhasil Disusun!");
-        
-        setTimeout(() => { 
-            if(typeof applySmartBreak === 'function') applySmartBreak(); 
-        }, 800);
+        if(typeof applySmartBreak === 'function') applySmartBreak();
 
     } catch (error) {
         console.error(error);
-        alert("Gagal memproses AI. Pastikan Apps Script sudah di-deploy sebagai 'Anyone'.");
+        alert("Gagal: " + error.message);
     } finally {
         btn.innerHTML = "🚀 GENERATE AI";
         btn.disabled = false;
-    }
-}
-function handleTTDGeneric(input, targetId) {
-    const img = document.getElementById(targetId);
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => { 
-            img.src = e.target.result; 
-            img.classList.remove('hidden'); 
-        };
-        reader.readAsDataURL(input.files[0]);
     }
 }
 
