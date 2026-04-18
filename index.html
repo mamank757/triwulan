@@ -125,33 +125,29 @@
 <div class="no-print max-w-7xl mx-auto p-4">
     <div class="no-print-area shadow-2xl border-t-4 border-emerald-500">
         <h2 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
-            <i class="fa-solid fa-file-invoice"></i> PPL WAJO REPORT GENERATOR - TRIWULAN
+            <i class="fa-solid fa-file-invoice"></i> PPL MILENIAL WAJO REPORT GENERATOR - TRIWULAN
         </h2>
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
             <div class="lg:col-span-1 flex flex-col gap-3"> 
-                <label>INDENTITAS PENYULUH</label>
-                        <input type="text" id="in_nama" list="daftar_nama" oninput="updateDataPenyuluh()" placeholder="Pilih/Tulis Nama">
-                        <datalist id="daftar_nama">
-                            <option value="ABDUL RAHMAN, SP">
-                            <option value="A. FATHUR MUH. ISHAQ B, S.ST., M.Si">
-                            <option value="ANDI LUTHFIAH, SP">
-                            <option value="FITRIYANTI HASNURI, S.TP">
-                            <option value="INDRA YULIANA, S.TP., M.Si.">
-                            <option value="MIFTAHUL KHAIR, S.P.">
-                            <option value="NURUL FAHMI, S.P.">
-                            <option value="REZKI RAHAYU, S.P.">
-                            <option value="RIZAL SMITH ANUGRAH SYAM, S.P.">
-                            <option value="SUHADY HAMDAN, S.P.">
-                            <option value="SULFIANITA, S.P.">
-                            <option value="SURAHMAN, S.TP">
-                            <option value="UMAR, SP">
-                        </datalist>
+                <label class="text-[10px] font-bold text-slate-400 uppercase">PILIH NAMA PENYULUH</label>
+<select id="in_nama" onchange="updateDataPenyuluh()" class="w-full bg-slate-900 border-emerald-500/50 text-white p-3 rounded-lg focus:ring-2 focus:ring-emerald-500">
+    <option value="" disabled selected>-- Pilih Nama --</option>
+    <option value="ABDUL RAHMAN, SP">ABDUL RAHMAN, SP</option>
+    <option value="A. FATHUR MUH. ISHAQ B, S.ST., M.Si">A. FATHUR MUH. ISHAQ B, S.ST., M.Si</option>
+    <option value="ANDI LUTHFIAH, SP">ANDI LUTHFIAH, SP</option>
+    <option value="FITRIYANTI HASNURI, S.TP">FITRIYANTI HASNURI, S.TP</option>
+    <option value="INDRA YULIANA, S.TP., M.Si.">INDRA YULIANA, S.TP., M.Si.</option>
+    <option value="MIFTAHUL KHAIR, S.P.">MIFTAHUL KHAIR, S.P.</option>
+    <option value="NURUL FAHMI, S.P.">NURUL FAHMI, S.P.</option>
+    <option value="REZKI RAHAYU, S.P.">REZKI RAHAYU, S.P.</option>
+    <option value="RIZAL SMITH ANUGRAH SYAM, S.P.">RIZAL SMITH ANUGRAH SYAM, S.P.</option>
+    <option value="SUHADY HAMDAN, S.P.">SUHADY HAMDAN, S.P.</option>
+    <option value="SULFIANITA, S.P.">SULFIANITA, S.P.</option>
+    <option value="SURAHMAN, S.TP">SURAHMAN, S.TP</option>
+    <option value="UMAR, SP">UMAR, SP</option>
+</select>
                 <input type="text" id="in_nip" oninput="sync()" placeholder="NIP">
                 <select id="in_jabatan" onchange="sync()">
-                    <option value="Penyuluh Pertanian Pemula">Penyuluh Pertanian Pemula</option>
-                        <option value="Penyuluh Pertanian Terampil">Penyuluh Pertanian Terampil</option>
-                        <option value="Penyuluh Pertanian Mahir">Penyuluh Pertanian Mahir</option>
-                        <option value="Penyuluh Pertanian Penyelia">Penyuluh Pertanian Penyelia</option>
                         <option value="Penyuluh Pertanian Ahli Pertama">Penyuluh Pertanian Ahli Pertama</option>
                         <option value="Penyuluh Pertanian Ahli Muda">Penyuluh Pertanian Ahli Muda</option>
                         <option value="Penyuluh Pertanian Ahli Madya">Penyuluh Pertanian Ahli Madya</option>
