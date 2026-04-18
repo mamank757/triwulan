@@ -15,7 +15,23 @@
     align-items: center;
     width: 100%;
 }
-        
+     /* Pastikan container tanda tangan memiliki struktur yang stabil */
+#sig_wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 40px;
+    width: 100%;
+    align-items: end; /* Ini kunci agar bagian bawah (nama) sejajar */
+}
+
+.sig-box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 180px; /* Memberi ruang yang cukup untuk TTD */
+}   
         #show_koordinator:checked + .check-icon {
         opacity: 1;
     }
@@ -293,23 +309,33 @@
             <h2 class="text-center font-bold text-lg uppercase mb-8">BAB III. KESIMPULAN</h2>
             <div id="out_kesimp" class="ai-content leading-relaxed">...</div>
         </div>
-       <div id="sig_wrapper" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; width: 100%; padding-bottom: 60px;;">
-    <div id="col_koor" class="hidden" style="text-align: center;">
-        <br>Mengetahui,<br>Koordinator BPP,
-        <div class="h-24 flex items-center justify-center relative">
-            <img id="out_ttd_koor_img" src="" class="img-ttd hidden">
+      <div id="sig_wrapper" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; width: 100%;">
+    <div id="col_koor" class="hidden sig-box">
+        <div style="margin-bottom: auto;">
+            Mengetahui,<br>
+            Koordinator BPP,
         </div>
-        <p class="name-line" id="out_nama_koor_sig">-</p><br>
-        NIP. <span id="out_nip_koor_sig">-</span>
+        <div class="h-24 flex items-center justify-center relative" style="height: 100px;">
+            <img id="out_ttd_koor_img" src="" class="img-ttd hidden" style="max-height: 100px;">
+        </div>
+        <div>
+            <p class="name-line" id="out_nama_koor_sig">-</p><br>
+            NIP. <span id="out_nip_koor_sig">-</span>
+        </div>
     </div>
 
-    <div id="col_penyuluh" style="text-align: center; grid-column: 2;">
-        <span id="out_lokasi_tgl">..., ...</span><br>Penyuluh Pertanian,
-        <div class="h-24 flex items-center justify-center relative">
-            <img id="out_ttd_img" src="" class="img-ttd hidden">
+    <div id="col_penyuluh" class="sig-box" style="grid-column: 2;">
+        <div style="margin-bottom: auto;">
+            <span id="out_lokasi_tgl">..., ...</span><br>
+            Penyuluh Pertanian,
         </div>
-        <p class="name-line" id="out_nama_sig">-</p><br>
-        NIP. <span id="out_nip_sig">-</span>
+        <div class="h-24 flex items-center justify-center relative" style="height: 100px;">
+            <img id="out_ttd_img" src="" class="img-ttd hidden" style="max-height: 100px;">
+        </div>
+        <div>
+            <p class="name-line" id="out_nama_sig">-</p><br>
+            NIP. <span id="out_nip_sig">-</span>
+        </div>
     </div>
 </div>
         <div class="page-number">3</div>
