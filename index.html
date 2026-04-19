@@ -297,6 +297,7 @@
             <th style="width: 30%;">Komponen IKI</th>
             <th style="width: 40%;">Analisis Kinerja</th>
             <th style="width: 30%;">Kendala & Tindak Lanjut</th>
+            
         </tr>
     </thead>
     <tbody id="out_table_body"></tbody>
@@ -481,25 +482,26 @@ const dataPenyuluh = {
         }
     }
 
-    function init() {
-        const cont = document.getElementById('input_container');
-        cont.innerHTML = "";
-        ikiRef.forEach((item) => {
-            cont.innerHTML += `<div class="input-card" id="card_${item.id}">
-                <div class="flex items-start gap-3 mb-3">
-                    <input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})" class="mt-1 w-4 h-4 shrink-0">
-                    <label class="text-white text-[11px] font-bold leading-tight cursor-pointer" for="chk_${item.id}">${item.id}. ${item.k}</label>
-                </div>
-                <div id="box_${item.id}" class="hidden flex flex-col gap-3 ml-7">
-                    <input type="number" id="m1_${item.id}" placeholder="Bulan I" oninput="updateView()">
-                    <input type="number" id="m2_${item.id}" placeholder="Bulan II" oninput="updateView()">
-                    <input type="number" id="m3_${item.id}" placeholder="Bulan III" oninput="updateView()">
-                    <textarea id="ken_${item.id}" placeholder="Kendala/Tindak Lanjut"></textarea>
-                </div>
-            </div>`;
-        });
-        sync();
-    }
+   function init() {
+    const cont = document.getElementById('input_container');
+    cont.innerHTML = "";
+    ikiRef.forEach((item) => {
+        cont.innerHTML += `<div class="input-card" id="card_${item.id}">
+            <div class="flex items-start gap-3 mb-3">
+                <input type="checkbox" id="chk_${item.id}" onchange="toggle(${item.id})" class="mt-1 w-4 h-4 shrink-0">
+                <label class="text-white text-[11px] font-bold leading-tight cursor-pointer" for="chk_${item.id}">${item.id}. ${item.k}</label>
+            </div>
+            <div id="box_${item.id}" class="hidden flex flex-col gap-3 ml-7">
+                <input type="number" id="m1_${item.id}" placeholder="Bulan I" oninput="updateView()">
+                <input type="number" id="m2_${item.id}" placeholder="Bulan II" oninput="updateView()">
+                <input type="number" id="m3_${item.id}" placeholder="Bulan III" oninput="updateView()">
+                <input type="text" id="link_${item.id}" placeholder="Link Bukti (Drive/Sosmed)" oninput="updateView()" class="border-emerald-500/30 text-[10px]">
+                <textarea id="ken_${item.id}" placeholder="Kendala/Tindak Lanjut"></textarea>
+            </div>
+        </div>`;
+    });
+    sync();
+}
 
     function toggle(id) {
         document.getElementById(`box_${id}`).classList.toggle('hidden', !document.getElementById(`chk_${id}`).checked);
@@ -543,29 +545,56 @@ const dataPenyuluh = {
     }
 
     function updateView() {
-        const tbT = document.getElementById('out_target_body');
-        const tbM = document.getElementById('out_table_body');
-        const triwulan = document.getElementById('in_triwulan').value;
-        tbT.innerHTML = ""; tbM.innerHTML = "";
-        let c = 1;
+    const tbT = document.getElementById('out_target_body');
+    const tbM = document.getElementById('out_table_body');
+    const triwulan = document.getElementById('in_triwulan').value;
+    
+    if (!tbT || !tbM) return;
+    
+    tbT.innerHTML = ""; 
+    tbM.innerHTML = "";
+    let c = 1;
 
-        ikiRef.forEach((item) => {
-            if(document.getElementById(`chk_${item.id}`).checked) {
-                let targetDinamis = item.tar;
-                if (item.id === 16) {
-                    targetDinamis = (triwulan === "TRIWULAN I" || triwulan === "TRIWULAN III") ? 2 : 1;
-                }
-                const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
-                const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
-                const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
-                const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
-
-                tbT.innerHTML += `<tr><td>${item.k}</td><td align="center">${targetDinamis}</td><td align="center">${total}</td><td align="center">${item.sat}</td><td align="center">${total >= targetDinamis ? '✅' : '⚠️'}</td></tr>`;
-                tbM.innerHTML += `<tr><td align="center">${c++}</td><td class="font-bold">${item.k}</td><td id="out_r_${item.id}">...</td><td id="out_k_${item.id}">-</td></tr>`;
+    ikiRef.forEach((item) => {
+        const checkbox = document.getElementById(`chk_${item.id}`);
+        if(checkbox && checkbox.checked) {
+            // 1. Logika Perhitungan Target
+            let targetDinamis = item.tar;
+            if (item.id === 16) {
+                targetDinamis = (triwulan === "TRIWULAN I" || triwulan === "TRIWULAN III") ? 2 : 1;
             }
-        });
-    }
 
+            const v1 = parseFloat(document.getElementById(`m1_${item.id}`).value) || 0;
+            const v2 = parseFloat(document.getElementById(`m2_${item.id}`).value) || 0;
+            const v3 = parseFloat(document.getElementById(`m3_${item.id}`).value) || 0;
+            const total = (item.sat === "%") ? Math.max(v1, v2, v3) : (v1 + v2 + v3);
+
+            // 2. Ambil nilai link dari input
+            const inputLink = document.getElementById(`link_${item.id}`) ? document.getElementById(`link_${item.id}`).value : "";
+            let linkPreview = inputLink ? `<br><span style="font-size:7pt; color:blue; font-style:italic;">Bukti: ${inputLink}</span>` : "";
+
+            // 3. Update Tabel Ringkasan (Tabel Atas)
+            tbT.innerHTML += `
+                <tr>
+                    <td>${item.k}</td>
+                    <td align="center">${targetDinamis}</td>
+                    <td align="center">${total}</td>
+                    <td align="center">${item.sat}</td>
+                    <td align="center">${total >= targetDinamis ? '✅' : '⚠️'}</td>
+                </tr>`;
+            
+            // 4. Update Tabel Matriks (Tabel Bawah)
+            // Link disisipkan di kolom Analisis (kolom ke-3)
+            tbM.innerHTML += `
+                <tr>
+                    <td align="center">${c++}</td>
+                    <td class="font-bold">${item.k}</td>
+                    <td id="out_r_${item.id}">Menunggu proses AI... ${linkPreview}</td>
+                    <td id="out_k_${item.id}">-</td>
+                </tr>`;
+        }
+    });
+}
     async function generateAI() {
     // 1. Ambil nilai NIP dan Elemen Tombol
     const nipVal = document.getElementById('in_nip').value.trim();
@@ -621,52 +650,85 @@ Output wajib JSON murni tanpa markdown: {"latar":"", "tujuan":"", "kesimp":"", "
     btn.innerHTML = "<i class='fas fa-spinner fa-spin'></i> Ai sedang menyusun laporan...";
     btn.disabled = true;
 
-    try {
-        const webAppUrl = "https://script.google.com/macros/s/AKfycbwpBSTb0mEMmvJM_oAMefVAFfksxezjqVwktc58Ds9k8cCsmhr8_JlNMJxC_pDOBoUz/exec";
-
-        const response = await fetch(webAppUrl, {
+   try {
+        const response = await fetch("https://script.google.com/macros/s/AKfycbz_8x94j7_YpS1_6XW87j0v9y9vP2X_Y7_Y/exec", { // Ganti dengan URL Script Anda
             method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ prompt: narasiPrompt }) // Variabel sudah disamakan
+            body: narasiPrompt
         });
-
-        if (!response.ok) throw new Error('Gagal terhubung ke Server AI');
         
         const result = await response.json();
-        
-        if (!result.candidates || !result.candidates[0]) {
-            throw new Error("Respon AI kosong. Cek API Key di Apps Script.");
-        }
-
         let rawContent = result.candidates[0].content.parts[0].text;
-        rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "").trim();
+        rawContent = rawContent.replace(/```json/g, "").replace(/```/g, "");
+        
         const aiData = JSON.parse(rawContent);
 
-        // 6. Isi ke Tabel Hasil
-        document.getElementById('out_latar').innerText = aiData.latar;
-        document.getElementById('out_tujuan').innerText = aiData.tujuan;
-        document.getElementById('out_kesimp').innerText = aiData.kesimp;
+        // 1. Isi Konten Naratif
+        document.getElementById('out_latar').innerHTML = aiData.latar;
+        document.getElementById('out_tujuan').innerHTML = aiData.tujuan;
+        document.getElementById('out_kesimp').innerHTML = aiData.kesimp;
 
+        // 2. Isi Tabel Matriks & Sisipkan Link Bukti
         aiData.items.forEach(item => {
-            const rCell = document.getElementById(`out_r_${item.id}`);
-            const kCell = document.getElementById(`out_k_${item.id}`);
-            if(rCell) rCell.innerText = item.analisis;
-            if(kCell) kCell.innerText = item.tindak;
+            const cellAnalisis = document.getElementById(`out_r_${item.id}`);
+            const cellKendala = document.getElementById(`out_k_${item.id}`);
+            
+            // Ambil nilai link dari input yang ada di form
+            const inputLink = document.getElementById(`link_${item.id}`) ? document.getElementById(`link_${item.id}`).value : "";
+
+            if (cellAnalisis) {
+                // Gabungkan Analisis AI dengan Link Bukti (dengan styling rapi)
+                let linkHTML = inputLink ? `<br><div style="margin-top:8px; padding-top:5px; border-top:1px dashed #ccc; font-size:7pt; color:blue; line-height:1.2;"><b>Link Bukti:</b> <a href="${inputLink}" target="_blank" style="word-break: break-all; text-decoration: underline;">${inputLink}</a></div>` : "";
+                
+                cellAnalisis.innerHTML = item.analisis + linkHTML;
+            }
+            
+            if (cellKendala) {
+                cellKendala.innerText = item.tindak;
+            }
         });
 
-        alert("✅ Laporan Berhasil Disusun!");
-        if(typeof applySmartBreak === 'function') applySmartBreak();
+        // 3. Jalankan perapian halaman
+        applySmartBreak();
+        
+        btn.innerHTML = "🚀 GENERATE AI BERHASIL";
+        btn.disabled = false;
 
     } catch (error) {
         console.error(error);
-        alert("Gagal: " + error.message);
-    } finally {
+        alert("Gagal memproses AI: " + error.message);
         btn.innerHTML = "🚀 GENERATE AI";
         btn.disabled = false;
     }
 }
 
-    window.onload = init;
+// Inisialisasi awal saat halaman dimuat
+window.onload = init;
+
+function handleTTD(input) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById('out_ttd_img');
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+}
+
+function handleTTDGeneric(input, targetId) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.getElementById(targetId);
+            img.src = e.target.result;
+            img.classList.remove('hidden');
+        }
+        reader.readAsDataURL(file);
+    }
+}
 </script>
 </body>
 </html>
